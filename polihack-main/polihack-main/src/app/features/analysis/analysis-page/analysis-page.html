@@ -1,0 +1,87 @@
+<section class="analysis-page">
+  @if (loading()) {
+    <div class="loading-panel">
+      <span class="spinner"></span>
+      <h1>Building the agent map</h1>
+      <p>Scanning prompts, agent usage, handoffs, and missing orchestration points.</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="loading-panel">
+      <h1>Backend analysis failed</h1>
+      <p>{{ errorMessage() }}</p>
+      <button type="button" (click)="restart()">Back to repo input</button>
+    </div>
+  } @else if (analysis(); as analysis) {
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Analysis summary</p>
+        <h1>Your repo is operating at L3</h1>
+        <p>{{ analysis.repoUrl }} - {{ analysis.branch }}</p>
+      </div>
+      <button type="button" (click)="continue()">Help me improve</button>
+    </header>
+
+    <div class="metrics" aria-label="Repository maturity">
+      <article>
+        <span>{{ analysis.agentsDetected }}</span>
+        <p>Agents detected</p>
+      </article>
+      <article>
+        <span>{{ analysis.workflow }}</span>
+        <p>Workflow shape</p>
+      </article>
+      <article>
+        <span>{{ analysis.reusability }}</span>
+        <p>Output reuse</p>
+      </article>
+      <article class="level-card">
+        <span>{{ analysis.score }}/100</span>
+        <p>L3 maturity score</p>
+      </article>
+    </div>
+
+    <div class="content-grid">
+      <section class="section-panel">
+        <div class="section-title">
+          <p class="eyebrow">Detected agents</p>
+          <h2>Existing capabilities</h2>
+        </div>
+
+        <div class="agent-list">
+          @for (agent of analysis.agents; track $index) {
+            <article>
+              <div>
+                <h3>{{ agent.name }}</h3>
+                <p>{{ agent.role }}</p>
+              </div>
+              <small>{{ agent.signal }}</small>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="section-panel">
+        <div class="section-title">
+          <p class="eyebrow">Manual glue work</p>
+          <h2>Handoffs to automate</h2>
+        </div>
+
+        <div class="handoff-list">
+          @for (step of analysis.manualSteps; track $index) {
+            <article>
+              <strong>{{ step.from }} -> {{ step.to }}</strong>
+              <p>{{ step.issue }}</p>
+              <span>{{ step.automation }}</span>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  } @else {
+    <div class="loading-panel">
+      <h1>No analysis session found</h1>
+      <p>Start a new repository scan to rebuild the demo state.</p>
+      <button type="button" (click)="restart()">Connect repo</button>
+    </div>
+  }
+</section>

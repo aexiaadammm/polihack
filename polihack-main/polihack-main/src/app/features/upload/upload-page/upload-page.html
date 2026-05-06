@@ -1,0 +1,61 @@
+<section class="connect-page">
+  <div class="panel">
+    <div class="brand-row">
+      <span class="mark">H</span>
+      <p class="eyebrow">Hive L3 to L4</p>
+    </div>
+
+    <h1>Upgrade an agent-based repo into an orchestrated workflow</h1>
+
+    <p class="subtitle">
+      Connect a repository, detect the existing AI agents, then generate a main agent that coordinates code, tests, fixes, and review.
+    </p>
+
+    <form (ngSubmit)="analyzeRepository()">
+      <label>
+        Repository URL
+        <input
+          type="text"
+          name="repoUrl"
+          [(ngModel)]="repoUrl"
+          placeholder="https://github.com/org/repo"
+        />
+      </label>
+
+      <label>
+        Token <span>optional for public repos</span>
+        <input
+          type="password"
+          name="accessToken"
+          [(ngModel)]="accessToken"
+          placeholder="ghp_xxxxxxxxx"
+        />
+      </label>
+
+      <label>
+        Branch
+        <input
+          type="text"
+          name="branch"
+          [(ngModel)]="branch"
+          placeholder="main"
+        />
+      </label>
+
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
+
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Analyzing...' : 'Analyze & Upgrade My Workflow' }}
+      </button>
+    </form>
+
+    <div class="demo-strip" aria-label="Demo flow preview">
+      <span>Analyze</span>
+      <span>Ask</span>
+      <span>Generate</span>
+      <span>Explain</span>
+    </div>
+  </div>
+</section>

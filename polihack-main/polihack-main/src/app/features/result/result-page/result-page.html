@@ -1,0 +1,112 @@
+<section class="result-page">
+  @if (loading()) {
+    <div class="loading-panel">
+      <span class="spinner"></span>
+      <h1>Generating the main agent</h1>
+      <p>Combining repo analysis, answers, retry rules, and validation gates.</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="loading-panel">
+      <h1>Backend generation failed</h1>
+      <p>{{ errorMessage() }}</p>
+      <button type="button" (click)="restart()">Back to repo input</button>
+    </div>
+  } @else if (orchestrator(); as orchestrator) {
+    <header>
+      <div>
+        <p class="eyebrow">L4 orchestrator ready</p>
+        <h1>Main agent generated</h1>
+        <p>{{ orchestrator.profile.pain }}</p>
+      </div>
+      <button type="button" (click)="restart()">Analyze another repo</button>
+    </header>
+
+    <main class="result-grid">
+      <section class="code-viewer">
+        <div class="section-title">
+          <p class="eyebrow">Click any line</p>
+          <h2>Orchestrator pseudocode</h2>
+        </div>
+
+        <div class="code-lines">
+          @for (line of orchestrator.lines; track line.lineNumber) {
+            <button
+              type="button"
+              [class.active]="selectedLine()?.lineNumber === line.lineNumber"
+              (click)="selectLine(line)"
+            >
+              <span>{{ line.lineNumber }}</span>
+              <code>{{ line.code }}</code>
+            </button>
+          }
+        </div>
+      </section>
+
+      <aside class="explain-panel">
+        <div>
+          <p class="eyebrow">Explainability</p>
+          <h2>Why this line exists</h2>
+        </div>
+
+        <article class="explanation">
+          <strong>Line {{ selectedLine()?.lineNumber }}</strong>
+          <p>{{ explanation() }}</p>
+        </article>
+
+        <div class="impact">
+          <article>
+            <span>Coordination</span>
+            <p>{{ orchestrator.impact.coordination }}</p>
+          </article>
+          <article>
+            <span>Consistency</span>
+            <p>{{ orchestrator.impact.consistency }}</p>
+          </article>
+          <article>
+            <span>Scaling</span>
+            <p>{{ orchestrator.impact.scaling }}</p>
+          </article>
+        </div>
+      </aside>
+    </main>
+
+    @if (automationFile(); as automationFile) {
+      <section class="automation-file">
+        <p class="eyebrow">Repo-ready automation file</p>
+        <h2>{{ automationFile.fileName }}</h2>
+        <p class="automation-description">
+          Generated starter file that turns detected handoffs into an executable orchestration skeleton.
+        </p>
+
+        <div class="automation-meta">
+          <article>
+            <strong>Recommended path</strong>
+            <span>{{ automationFile.recommendedPath }}</span>
+          </article>
+          <article>
+            <strong>Language</strong>
+            <span>{{ automationFile.language }}</span>
+          </article>
+        </div>
+
+        <div class="automation-rules">
+          @for (rule of automationFile.rules; track rule) {
+            <article>{{ rule }}</article>
+          }
+        </div>
+
+        <pre class="automation-code"><code>{{ automationFile.content }}</code></pre>
+      </section>
+    }
+
+    <section class="integration">
+      <p class="eyebrow">Visual Studio friendly extension path</p>
+      <h2>Next integration steps</h2>
+      <div>
+        @for (step of orchestrator.integrationSteps; track step) {
+          <article>{{ step }}</article>
+        }
+      </div>
+    </section>
+  }
+</section>

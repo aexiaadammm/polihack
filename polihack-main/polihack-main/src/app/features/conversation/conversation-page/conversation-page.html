@@ -1,0 +1,88 @@
+<section class="conversation-page">
+  <header>
+    <p class="eyebrow">Interactive learning</p>
+    <h1>Teach the main agent how your team really works</h1>
+    <p>Each answer creates a small orchestration rule, so the demo shows both automation and learning.</p>
+  </header>
+
+  <main class="workspace">
+    <section class="question-panel">
+      @if (loading()) {
+        <div class="progress">
+          <span>Loading backend questions...</span>
+          <div><i style="width: 35%"></i></div>
+        </div>
+      } @else if (errorMessage()) {
+        <h2>Backend question flow failed</h2>
+        <p>{{ errorMessage() }}</p>
+      } @else {
+        <div class="progress">
+          <span>Question {{ currentIndex() + 1 }} of {{ questions().length }}</span>
+          <div>
+            <i [style.width.%]="((currentIndex() + 1) / questions().length) * 100"></i>
+          </div>
+        </div>
+
+        @if (currentQuestion(); as question) {
+          <h2>{{ question.text }}</h2>
+          <p>{{ question.whyAsked || 'Answer this so the backend can generate an explicit orchestration rule.' }}</p>
+
+          @if (question.options.length) {
+            <div class="options">
+              @for (option of question.options; track $index) {
+                <button
+                  type="button"
+                  [class.selected]="selectedAnswer() === option"
+                  (click)="choose(option)"
+                >
+                  {{ option }}
+                </button>
+              }
+            </div>
+          } @else {
+            <textarea
+              rows="5"
+              [value]="freeTextAnswer()"
+              (input)="updateFreeText($event)"
+              placeholder="Write your answer..."
+            ></textarea>
+          }
+        }
+
+        <div class="actions">
+          <button type="button" class="secondary" [disabled]="currentIndex() === 0 || saving()" (click)="back()">Back</button>
+          <button type="button" [disabled]="!selectedValue().trim() || saving()" (click)="next()">
+            {{ currentIndex() === questions().length - 1 ? (saving() ? 'Submitting...' : 'Generate my orchestrator') : 'Save answer' }}
+          </button>
+        </div>
+      }
+    </section>
+
+    <aside class="code-panel">
+      <div>
+        <p class="eyebrow">Main agent preview</p>
+        <h2>Generated as you answer</h2>
+      </div>
+
+      <pre><code>@if (generatedLines().length === 0) {
+workflow = Orchestrator(name="main_agent")
+} @else {
+workflow = Orchestrator(name="main_agent")
+@for (line of generatedLines(); track $index) {
+{{ line.code }}
+}
+}</code></pre>
+
+      <div class="explanations">
+        @for (line of generatedLines(); track $index) {
+          <article>
+            <strong>{{ line.code }}</strong>
+            <p>{{ line.reason }}</p>
+          </article>
+        } @empty {
+          <p>Your first answer will create the first workflow rule.</p>
+        }
+      </div>
+    </aside>
+  </main>
+</section>

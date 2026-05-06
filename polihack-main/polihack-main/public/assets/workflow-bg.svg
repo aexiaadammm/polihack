@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-label="Abstract workflow nodes">
+  <rect width="1400" height="900" fill="#111827"/>
+  <g fill="none" stroke="#2dd4bf" stroke-width="3" opacity="0.32">
+    <path d="M170 180h260c58 0 64 82 122 82h190"/>
+    <path d="M244 506h220c74 0 82-128 156-128h280"/>
+    <path d="M760 614h210c82 0 86-164 168-164h150"/>
+  </g>
+  <g>
+    <circle cx="170" cy="180" r="22" fill="#14b8a6"/>
+    <circle cx="430" cy="180" r="18" fill="#f59e0b"/>
+    <circle cx="742" cy="262" r="24" fill="#38bdf8"/>
+    <circle cx="244" cy="506" r="24" fill="#38bdf8"/>
+    <circle cx="620" cy="378" r="20" fill="#14b8a6"/>
+    <circle cx="900" cy="378" r="26" fill="#f59e0b"/>
+    <circle cx="760" cy="614" r="22" fill="#f59e0b"/>
+    <circle cx="1138" cy="450" r="24" fill="#14b8a6"/>
+    <circle cx="1288" cy="450" r="18" fill="#38bdf8"/>
+  </g>
+  <g fill="#ffffff" opacity="0.12">
+    <rect x="92" y="274" width="220" height="74" rx="8"/>
+    <rect x="1012" y="184" width="260" height="84" rx="8"/>
+    <rect x="404" y="672" width="320" height="92" rx="8"/>
+  </g>
+</svg>

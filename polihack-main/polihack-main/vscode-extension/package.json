@@ -1,0 +1,132 @@
+{
+  "name": "hive-vscode-extension",
+  "displayName": "Hive Orchestrator",
+  "description": "Analyze the current repository with Hive and generate an L4 orchestrator from VS Code.",
+  "version": "0.0.1",
+  "publisher": "polihack",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:java",
+    "onLanguage:python",
+    "onLanguage:json",
+    "onLanguage:yaml",
+    "onCommand:hive.analyzeCurrentRepository",
+    "onCommand:hive.openAnalysisPanel",
+    "onCommand:hive.generateOrchestrator",
+    "onCommand:hive.saveOrchestratorAsMarkdown",
+    "onCommand:hive.configureBackendUrl",
+    "onView:hive.orchestrationState"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Hive",
+      "properties": {
+        "hive.backendUrl": {
+          "type": "string",
+          "default": "http://localhost:8080",
+          "description": "Base URL for the Hive Spring Boot backend."
+        },
+        "hive.autoDetectRepository": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect the current workspace Git remote and branch."
+        },
+        "hive.saveGeneratedFileName": {
+          "type": "string",
+          "default": "hive-orchestrator.generated.md",
+          "description": "Markdown file name used when saving the generated orchestrator."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "hive.analyzeCurrentRepository",
+        "title": "Hive: Analyze Current Repository"
+      },
+      {
+        "command": "hive.openAnalysisPanel",
+        "title": "Hive: Open Analysis Panel"
+      },
+      {
+        "command": "hive.generateOrchestrator",
+        "title": "Hive: Generate Orchestrator"
+      },
+      {
+        "command": "hive.saveOrchestratorAsMarkdown",
+        "title": "Hive: Save Orchestrator as Markdown"
+      },
+      {
+        "command": "hive.configureBackendUrl",
+        "title": "Hive: Configure Backend URL"
+      },
+      {
+        "command": "hive.explainRole",
+        "title": "Hive: Explain Role"
+      },
+      {
+        "command": "hive.addToOrchestrator",
+        "title": "Hive: Add to Orchestrator"
+      },
+      {
+        "command": "hive.markAsNotAgent",
+        "title": "Hive: Mark as Not Agent"
+      },
+      {
+        "command": "hive.askAboutComponent",
+        "title": "Hive: Ask About This Component"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "hive",
+          "title": "Hive",
+          "icon": "media/hive.svg"
+        }
+      ]
+    },
+    "views": {
+      "hive": [
+        {
+          "id": "hive.orchestrationState",
+          "name": "Orchestration State",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "hive.analyzeCurrentRepository",
+          "when": "view == hive.orchestrationState",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "hive.askAboutComponent",
+          "group": "navigation@20"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.96.0",
+    "typescript": "^5.7.2"
+  }
+}
